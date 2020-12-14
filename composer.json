@@ -1,0 +1,24 @@
+{
+  "name": "tradesk/sms",
+  "description": "Tradesk SMS SDK",
+  "type": "library",
+  "keywords": ["sms", "tradesk"],
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "roksta",
+          "email": "roksta21@gmail.com"
+      }
+  ],
+  "autoload": {
+      "files": [
+          "helpers/helpers.php"
+      ],
+      "psr-4": {
+          "Futurefast\\Tradesk\\": "src/"
+      }
+  },
+  "require": {
+      "php": ">=5.4.0"
+  }
+}
