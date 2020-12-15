@@ -1,9 +1,9 @@
 <?php
 
-namespace FutureFast\SDK;
+namespace FutureFast\Tradesk;
 
-use FutureFast\SDK\Exceptions\InvalidConfigException;
-use FutureFast\SDK\Exceptions\InvalidPhoneNumberException;
+use FutureFast\Tradesk\Exceptions\InvalidConfigException;
+use FutureFast\Tradesk\Exceptions\InvalidPhoneNumberException;
 use GuzzleHttp\Client;
 
 class SMS
