@@ -53,11 +53,19 @@ class SMS
         return $this;
     }
 
+    function str_replace_first($from, $to, $content)
+    {
+        $from = '/'.preg_quote($from, '/').'/';
+
+        return preg_replace($from, $to, $content, 1);
+    }
+
+
     protected function validatePhoneNumber($phone_number)
     {
         if($this->startsWith($phone_number, '0')) {
             if(strlen($phone_number) == 10) {
-                array_push($this->receipients, $phone_number);
+                array_push($this->receipients, str_replace_first('0', '254', $phone_number));
 
                 return true;
             }
@@ -79,7 +87,7 @@ class SMS
             return true;
         }
         elseif(strlen((string)$phone_number) == 9) {
-            array_push($this->receipients, '0' . (string)$phone_number);
+            array_push($this->receipients, '254' . (string)$phone_number);
 
             return true;
         }
