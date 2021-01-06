@@ -63,36 +63,9 @@ class SMS
 
     protected function validatePhoneNumber($phone_number)
     {
-        if($this->startsWith($phone_number, '0')) {
-            if(strlen($phone_number) == 10) {
-                array_push($this->receipients, str_replace_first('0', '254', $phone_number));
+        array_push($this->receipients, $phone_number);
 
-                return true;
-            }
-
-            throw new InvalidPhoneNumberException($phone_number . ' is an invalid phone number');
-        }
-        else if($this->startsWith($phone_number, '254')) {
-            if(strlen($phone_number) == 12) {
-                array_push($this->receipients, $phone_number);
-
-                return true;
-            }
-
-            throw new InvalidPhoneNumberException($phone_number . ' is an invalid phone number');
-        }
-        elseif(strlen((string)$phone_number) == 11) {
-            array_push($this->receipients, (string)$phone_number);
-
-            return true;
-        }
-        elseif(strlen((string)$phone_number) == 9) {
-            array_push($this->receipients, '254' . (string)$phone_number);
-
-            return true;
-        }
-
-        throw new InvalidPhoneNumberException($phone_number . ' is an invalid phone number');
+        return true;
     }
 
     protected function startsWith($haystack, $needle)
@@ -100,6 +73,22 @@ class SMS
         $length = strlen($needle);
 
         return (substr($haystack, 0, $length) === $needle);
+    }
+
+    private function formatPhoneNumbers()
+    {
+        return collect($this->receipients)->map(function($phone_number) {
+            $phone_number = str_replace('+', '', $phone_number);
+            $phone_number = str_replace(' ', '', $phone_number);
+            
+            $pos = strpos($phone_number, '0');
+
+            if ($pos !== false) {
+                return substr_replace($phone_number, '254', 0, strlen('0'));
+            }
+
+            return $phone_number;
+        });
     }
 
     public function send()
@@ -113,7 +102,7 @@ class SMS
                 'message' => $this->message,
                 'app_key' => $this->app_key,
                 'app_secret' => $this->app_secret,
-                'receipients' => $this->receipients
+                'receipients' => $this->formatPhoneNumbers()
             ]
         ]);
 
