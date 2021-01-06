@@ -1,6 +1,6 @@
 <?php
 
-namespace FutureFast\SDK\Exceptions;
+namespace FutureFast\Tradesk\Exceptions;
 
 use Exception;
 
