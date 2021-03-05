@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 class SMS
 {
     public $app_key, $app_secret, $message;
-    public $server_api = 'http://api.tradesk.co.ke';
+    public $server_api = 'https://api.tradesk.co.ke';
     public $receipients = [];
 
     function __construct($app_key, $app_secret)
