@@ -15,7 +15,7 @@
           "helpers/helpers.php"
       ],
       "psr-4": {
-          "Futurefast\\Tradesk\\": "src/"
+          "FutureFast\\Tradesk\\": "src/"
       }
   },
   "require": {
