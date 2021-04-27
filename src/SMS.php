@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 class SMS
 {
     public $app_key, $app_secret, $message;
-    public $server_api = 'https://api.tradesk.co.ke';
+    public $server_api = 'http://api.tradesk.co.ke';
     public $receipients = [];
 
     function __construct($app_key, $app_secret)
@@ -47,7 +47,7 @@ class SMS
             }
         }
         else {
-            throw new Exception('Invalid receipients format');
+            throw new \Exception('Invalid receipients format');
         }
 
         return $this;
@@ -55,32 +55,9 @@ class SMS
 
     protected function validatePhoneNumber($phone_number)
     {
-        array_push($this->receipients, $phone_number);
+        array_push($this->receipients, '254' . substr($phone_number, -9));
 
         return true;
-    }
-
-    protected function startsWith($haystack, $needle)
-    {
-        $length = strlen($needle);
-
-        return (substr($haystack, 0, $length) === $needle);
-    }
-
-    private function formatPhoneNumbers()
-    {
-        return collect($this->receipients)->map(function($phone_number) {
-            $phone_number = str_replace('+', '', $phone_number);
-            $phone_number = str_replace(' ', '', $phone_number);
-            
-            $pos = strpos($phone_number, '0');
-
-            if ($pos !== false) {
-                return substr_replace($phone_number, '254', 0, strlen('0'));
-            }
-
-            return $phone_number;
-        });
     }
 
     public function send()
@@ -91,10 +68,10 @@ class SMS
         
         $response = $client->request('POST', '/api/v1/gateway/sms', [
             'json' => [
-                'message' => $this->message,
                 'app_key' => $this->app_key,
                 'app_secret' => $this->app_secret,
-                'receipients' => $this->formatPhoneNumbers()
+                'message' => $this->message,
+                'receipients' => $this->receipients
             ]
         ]);
 
