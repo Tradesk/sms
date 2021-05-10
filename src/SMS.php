@@ -3,7 +3,6 @@
 namespace FutureFast\Tradesk;
 
 use FutureFast\Tradesk\Exceptions\InvalidConfigException;
-use FutureFast\Tradesk\Exceptions\InvalidPhoneNumberException;
 use GuzzleHttp\Client;
 
 class SMS
@@ -66,18 +65,25 @@ class SMS
             'base_uri' => $this->server_api
         ]);
         
-        $response = $client->request('POST', '/api/v1/gateway/sms', [
-            'json' => [
-                'app_key' => $this->app_key,
-                'app_secret' => $this->app_secret,
-                'message' => $this->message,
-                'receipients' => $this->receipients
-            ]
-        ]);
+        try {
+            $response = $client->request('POST', '/api/v1/gateway/sms', [
+                'json' => [
+                    'app_key' => $this->app_key,
+                    'app_secret' => $this->app_secret,
+                    'message' => $this->message,
+                    'receipients' => $this->receipients
+                ]
+            ]);
 
-        return [
-            'status' => $response->getStatusCode(),
-            'message' => $response->getBody()->getContents()
-        ];
+            return [
+                'status' => $response->getStatusCode(),
+                'message' => $response->getBody()->getContents()
+            ];
+        } catch(\Exception $e) {
+            return [
+                'status' => 0,
+                'message' => 'Sending SMS Failed'
+            ];
+        }
     }
 }
